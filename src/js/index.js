@@ -1,16 +1,33 @@
-//import react into the bundle
-import React from 'react'
-import {createRoot} from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { BrowserRouter } from 'react-router-dom';
+import InjectContext from './store/appContext.js';
 
-//include your index.scss file into the bundle
-import "../styles/index.css";
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-//import your own components
-import Layout from './layout.js'
+root.render(
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+);
 
-//
-const root = createRoot(document.querySelector("#app"))
 
-//render your react application
-root.render(<Layout/>)
 
+// import React from 'react';
+// import ReactDOM from 'react-dom/client';
+// import App from './App';
+// import { BrowserRouter } from 'react-router-dom';
+// import injectContext from "./store/appContext";
+
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// const AppWithInjectedContext = injectContext(App);
+
+// root.render(
+//   <React.StrictMode>
+//     <BrowserRouter>
+//     <AppWithInjectedContext />
+//     </BrowserRouter>
+//  </React.StrictMode>
+// );
