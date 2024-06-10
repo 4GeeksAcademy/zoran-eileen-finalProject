@@ -1,33 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom';
-import InjectContext from './store/appContext.js';
+import { Provider } from './component/appContext.js';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const rootElement = document.getElementById('root');
+const root = ReactDOM.createRoot(rootElement);
 
 root.render(
-    <BrowserRouter>
+  <Provider>
       <App />
-    </BrowserRouter>
+  </Provider>
 );
-
-
-
-// import React from 'react';
-// import ReactDOM from 'react-dom/client';
-// import App from './App';
-// import { BrowserRouter } from 'react-router-dom';
-// import injectContext from "./store/appContext";
-
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-
-// const AppWithInjectedContext = injectContext(App);
-
-// root.render(
-//   <React.StrictMode>
-//     <BrowserRouter>
-//     <AppWithInjectedContext />
-//     </BrowserRouter>
-//  </React.StrictMode>
-// );

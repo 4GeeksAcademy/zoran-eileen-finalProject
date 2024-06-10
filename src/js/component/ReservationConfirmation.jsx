@@ -1,14 +1,14 @@
 import React from "react";
-import Reservation from "./Reservation.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ReservationConfirmation = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+
     return(
         <div>
-            <Reservation />
             <h1>Checkout stuff</h1>
-            <button onClick={() => navigate("/details")}>BACK BUTTON</button>
+            <button onClick={() => navigate(`/details/${id}`)}>Back to Listing</button>
         </div>
     );
 }

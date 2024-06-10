@@ -1,38 +1,54 @@
-// import React, { useEffect } from 'react';
-// import Reservation from './Reservation.jsx';
-// import SearchBar from './SearchBar.jsx'
-// import { Search } from '@mui/icons-material';
+import React, { useContext, useEffect, useState } from 'react';
+import { Context } from './appContext.js';
+import Reservation from './Reservation.jsx';
+import { useParams, Link } from 'react-router-dom';
+import styled from 'styled-components';
 
+// Styled components for custom styling
+const Container = styled.div`
+  display: flex;
+`;
 
-// const PropertyDetails = (item) => {
-//   return (
-//       <div className="item-details">
-//           <h4>{item.name}</h4>
-//           <p>{item.address}</p>
-//           <p>{item.type}</p>
-//           <p>Rating: {item.rating} ({item.reviewsCount} reviews)</p>
-//           <p>Price: ${item.price.rate} {item.price.currency} per night</p>
-//           <div className="images">
-//               {item.images.map((image, index) => (
-//                   <img key={index} src={image} alt={`Image ${index + 1}`} width="200" />
-//               ))}
-//           </div>
-//           <div className='Name_icons'>
-//               <div className="Name_share">
-//                   <IosShareIcon />
-//                   <a href="#">Share</a>
-//               </div>
-//               <div className='Name_save'>
-//                   <FavoriteBorderOutlinedIcon />
-//                   <a href="#">Save</a>
-//               </div>
-//           </div>
-//           <div className="book-now">
-//               <h3>Book Now</h3>
-//               <Reservation />
-//           </div>
-//       </div>
-//   );
-// };
+const ImageContainer = styled.div`
+  flex: 1;
+  padding: 20px;
+`;
 
-// export default PropertyDetails;
+const ReservationContainer = styled.div`
+  flex: 1;
+  position: ;
+  top: 20px;
+  margin-left: 20px; /* Adjust as needed */
+`;
+
+const PropertyDetails = () => {
+    const { id } = useParams();
+    const { store } = useContext(Context);
+    const [property, setProperty] = useState(null);
+
+    useEffect(() => {
+        if (store && store.items) {
+            const foundProperty = store.items.find(item => item.id === id);
+            setProperty(foundProperty);
+        }
+    }, [id, store]);
+
+    if (!property) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <Container>
+            <ImageContainer>
+                <h2>{property.name}</h2>
+                <img src={property.images[0]} alt="Property" width="100%" />
+                <p>{property.description}</p>
+            </ImageContainer>
+            <ReservationContainer>
+                <Reservation />
+            </ReservationContainer>
+        </Container>
+    );
+};
+
+export default PropertyDetails;

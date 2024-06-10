@@ -1,24 +1,33 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
 import PropertyDetails from "./component/PropertyDetails.jsx";
 import Reservation from "./component/Reservation.jsx";
 import ReservationConfirmation from "./component/ReservationConfirmation.jsx";
 import Navbar from "./component/Navbar.jsx";
 import SearchBar from "./component/SearchBar.jsx";
-
+import Theme from "./component/Theme.jsx"
+import { Provider } from './component/appContext.js';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
 
 function App() {
-
   return (
-    <div className="App">
-      <Navbar />
-        <Routes>
-          <Route path="/" element={<SearchBar />} />
-          {/* <Route path="/details/:id" element={<PropertyDetails />} /> */}
-          <Route path="/reservationconfirmation" element={<ReservationConfirmation />} />
-          <Route render={() => <h1>Not found!</h1>} />
-        </Routes>
-    </div>
+    <Provider>
+      <ThemeProvider theme={Theme}>
+        <CssBaseline />
+        <Router>
+          <Navbar />
+          <div className="container">
+            <Routes>
+              <Route path="/" element={<SearchBar />} />
+              <Route path="/details/:id" element={<PropertyDetails />} />
+              <Route path="/reservationconfirmation/:id" element={<ReservationConfirmation />} />
+            </Routes>
+          </div>
+        </Router>
+      </ThemeProvider>
+    </Provider>
   );
 }
- export default App;
+
+export default App;

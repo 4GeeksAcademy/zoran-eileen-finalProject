@@ -1,14 +1,53 @@
-import React, { useState, useEffect } from "react";
-import IosShareIcon from '@mui/icons-material/IosShare';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import Reservation from "./Reservation.jsx";
-import PropertyDetails from "./PropertyDetails.jsx";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext } from 'react';
+import { Context } from './appContext';
+import { Link } from 'react-router-dom';
+import { Button, TextField, Grid, Paper, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+const Container = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(3),
+    marginTop: theme.spacing(5),
+    borderRadius: 10,
+}));
+
+const FormField = styled(TextField)(({ theme }) => ({
+    margin: theme.spacing(1, 0),
+}));
+
+const Results = styled('div')(({ theme }) => ({
+    marginTop: theme.spacing(4),
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: theme.spacing(3),
+}));
+
+const Listing = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(2),
+    borderRadius: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+}));
+
+const ListingDetails = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    marginTop: 10,
+});
+
+const ListingImage = styled('img')(({ theme }) => ({
+    width: '100%',
+    height: 200,
+    objectFit: 'cover',
+    borderRadius: 10,
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+}));
 
 const SearchBar = () => {
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [items, setItems] = useState([]);
-    const [error, setError] = useState(null);
+    const { store, actions } = useContext(Context);
     const [location, setLocation] = useState('');
     const [checkin, setCheckin] = useState('');
     const [checkout, setCheckout] = useState('');
@@ -16,302 +55,132 @@ const SearchBar = () => {
     const [children, setChildren] = useState(0);
     const [infants, setInfants] = useState(0);
     const [pets, setPets] = useState(0);
-    const [selectedItem, setSelectedItem] = useState(null);
-
-
-    const fetchData = async () => {
-        const url = `https://airbnb13.p.rapidapi.com/search-location?location=${location}&checkin=${checkin}&checkout=${checkout}&adults=${adults}&children=${children}&infants=${infants}&pets=${pets}&page=1&currency=USD`;
-        const options = {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': '6a85a1be0amshfa9a4983738ed1bp1b867ajsnddc4a82a15a4',
-                'X-RapidAPI-Host': 'airbnb13.p.rapidapi.com'
-            }
-        };
-        try {
-            const response = await fetch(url, options);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }
-            const json = await response.json();
-            console.log(json); 
-            if (json.results) {
-                setItems(json.results);
-            } else {
-                throw new Error('Invalid data structure');
-            }
-            setIsLoaded(true);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            setError(error.message);
-            setIsLoaded(true);
-        }
-    };
 
     const handleSearch = (e) => {
         e.preventDefault();
-        setIsLoaded(false);
-        setItems([]);
-        setError(null);
-        fetchData();
-    };
-
-    
-    const navigate = useNavigate();
-    const handleItemClick = (item) => {
-        navigate(`/details/${item.id}`, { state: { item } });
-    };
-
-    const renderItemDetails = (item) => {
-        return (
-            <div className="item-details">
-                <h4>{item.name}</h4>
-                <p>{item.address}</p>
-                <p>{item.type}</p>
-                <p>Rating: {item.rating} ({item.reviewsCount} reviews)</p>
-                <p>Price: ${item.price.rate} {item.price.currency} per night</p>
-                <div className="images">
-                    {item.images.map((image, index) => (
-                        <img key={index} src={image} alt={`Image ${index + 1}`} width="200" />
-                    ))}
-                </div>
-                <div className='Name_icons'>
-                    <div className="Name_share">
-                        <IosShareIcon />
-                        <a href="#">Share</a>
-                    </div>
-                    <div className='Name_save'>
-                        <FavoriteBorderOutlinedIcon />
-                        <a href="#">Save</a>
-                    </div>
-                </div>
-                <div className="book-now">
-                    <h3>Book Now</h3>
-                    {/* <Reservation /> */}
-                </div>
-            </div>
-        );
+        actions.fetchData(location, checkin, checkout, adults, children, infants, pets);
     };
 
     return (
-
         <div className="NameofAirbnb">
-            <form onSubmit={handleSearch}>
-                <div>
-                    <label>
-                        Location:
-                        <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} required />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Check-in:
-                        <input type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} required />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Check-out:
-                        <input type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} required />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Adults:
-                        <input type="number" value={adults} onChange={(e) => setAdults(e.target.value)} min="1" required />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Children:
-                        <input type="number" value={children} onChange={(e) => setChildren(e.target.value)} min="0" required />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Infants:
-                        <input type="number" value={infants} onChange={(e) => setInfants(e.target.value)} min="0" required />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Pets:
-                        <input type="number" value={pets} onChange={(e) => setPets(e.target.value)} min="0" required />
-                    </label>
-                </div>
-                <button type="submit">Search</button>
-            </form>
+            <Container>
+                <Typography variant="h5" gutterBottom>Find Places to Stay</Typography>
+                <form onSubmit={handleSearch}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <FormField
+                                label="Location"
+                                variant="outlined"
+                                fullWidth
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={3}>
+                            <FormField
+                                label="Check-in"
+                                type="date"
+                                variant="outlined"
+                                fullWidth
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                value={checkin}
+                                onChange={(e) => setCheckin(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={3}>
+                            <FormField
+                                label="Check-out"
+                                type="date"
+                                variant="outlined"
+                                fullWidth
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                value={checkout}
+                                onChange={(e) => setCheckout(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={2}>
+                            <FormField
+                                label="Adults"
+                                type="number"
+                                variant="outlined"
+                                fullWidth
+                                value={adults}
+                                onChange={(e) => setAdults(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={2}>
+                            <FormField
+                                label="Children"
+                                type="number"
+                                variant="outlined"
+                                fullWidth
+                                value={children}
+                                onChange={(e) => setChildren(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={2}>
+                            <FormField
+                                label="Infants"
+                                type="number"
+                                variant="outlined"
+                                fullWidth
+                                value={infants}
+                                onChange={(e) => setInfants(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={2}>
+                            <FormField
+                                label="Pets"
+                                type="number"
+                                variant="outlined"
+                                fullWidth
+                                value={pets}
+                                onChange={(e) => setPets(e.target.value)}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button type="submit" color="primary" variant="contained" fullWidth>Search</Button>
+                        </Grid>
+                    </Grid>
+                </form>
+            </Container>
 
-            {error && <div>Error: {error}</div>}
-            {!isLoaded ? (
-                <div>Loading...</div>
-            )  : (
-                
-                <div className="results">
-                    {items.map(item => (
-                        <div key={item.id} className="listing" onClick={() => handleItemClick(item)}>
-                            <h4>{item.name}</h4>
-                            <p>Price: ${item.price.rate} {item.price.currency} per night</p>
-                            <img src={item.images[0]} alt="Thumbnail" width="100" />
-                        </div>
+            {store.items && store.items.length > 0 && (
+                <Results>
+                    {store.items.map(item => (
+                        <Listing key={item.id}>
+                            <ListingImage src={item.images[0]} alt="Thumbnail" />
+                            <ListingDetails>
+                                <Typography variant="h6">{item.name}</Typography>
+                                <Typography variant="body2">Price: ${item.price.rate} {item.price.currency} per night</Typography>
+                                <Button
+                                    component={Link}
+                                    to={`/details/${item.id}`}
+                                    color="secondary"
+                                    variant="contained"
+                                    size="small"
+                                    style={{ marginTop: 10 }}
+                                >
+                                    View Details
+                                </Button>
+                            </ListingDetails>
+                        </Listing>
                     ))}
-                </div>
+                </Results>
             )}
         </div>
     );
-}
+};
 
 export default SearchBar;
-
-// import React, { useState, useEffect } from "react";
-// import IosShareIcon from '@mui/icons-material/IosShare';
-// import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-
-
-// const SearchBar = () => {
-//     const [isLoaded, setIsLoaded] = useState(false);
-//     const [items, setItems] = useState([]);
-//     const [error, setError] = useState(null);
-//     const [location, setLocation] = useState('');
-//     const [checkin, setCheckin] = useState('');
-//     const [checkout, setCheckout] = useState('');
-//     const [adults, setAdults] = useState(1);
-//     const [children, setChildren] = useState(0);
-//     const [infants, setInfants] = useState(0);
-//     const [pets, setPets] = useState(0);
-//     const [selectedItem, setSelectedItem] = useState(null);
-//     const fetchData = async () => {
-//         const url = `https://airbnb13.p.rapidapi.com/search-location?location=${location}&checkin=${checkin}&checkout=${checkout}&adults=${adults}&children=${children}&infants=${infants}&pets=${pets}&page=1&currency=USD`;
-//         const options = {
-//             method: 'GET',
-//             headers: {
-//                 'X-RapidAPI-Key': '6a85a1be0amshfa9a4983738ed1bp1b867ajsnddc4a82a15a4',
-//                 'X-RapidAPI-Host': 'airbnb13.p.rapidapi.com'
-//             }
-//         };
-//         try {
-//             const response = await fetch(url, options);
-//             if (!response.ok) {
-//                 throw new Error(`Error: ${response.statusText}`);
-//             }
-//             const json = await response.json();
-//             console.log(json); 
-//             if (json.results) {
-//                 setItems(json.results);
-//             } else {
-//                 throw new Error('Invalid data structure');
-//             }
-//             setIsLoaded(true);
-//         } catch (error) {
-//             console.error('Error fetching data:', error);
-//             setError(error.message);
-//             setIsLoaded(true);
-//         }
-//     };
-//     const handleSearch = (e) => {
-//         e.preventDefault();
-//         setIsLoaded(false);
-//         setItems([]);
-//         setError(null);
-//         fetchData();
-//     };
-//     const handleItemClick = (item) => {
-//         setSelectedItem(item);
-//     };
-//     const renderItemDetails = (item) => {
-//         return (
-//             <div className="item-details">
-//                 <h4>{item.name}</h4>
-//                 <p>{item.address}</p>
-//                 <p>{item.type}</p>
-//                 <p>Rating: {item.rating} ({item.reviewsCount} reviews)</p>
-//                 <p>Price: ${item.price.rate} {item.price.currency} per night</p>
-//                 <div className="images">
-//                     {item.images.map((image, index) => (
-//                         <img key={index} src={image} alt={`Image ${index + 1}`} width="100" />
-//                     ))}
-//                 </div>
-//                 <div className='Name_icons'>
-//                     <div className="Name_share">
-//                         <IosShareIcon />
-//                         <a href="#">Share</a>
-//                     </div>
-//                     <div className='Name_save'>
-//                         <FavoriteBorderOutlinedIcon />
-//                         <a href="#">Save</a>
-//                     </div>
-//                 </div>
-//                 <div className="book-now">
-//                     <h3>Book Now</h3>
-//                     {/* Reservation area implementation goes here */}
-//                 </div>
-//             </div>
-//         );
-//     };
-//     return ( 
-//         <div className="NameofAirbnb"> 
-//             <form onSubmit={handleSearch}>
-//                 <div>
-//                     <label>
-//                         Location:
-//                         <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} required />
-//                     </label>
-//                 </div>
-//                 <div>
-//                     <label>
-//                         Check-in:
-//                         <input type="date" value={checkin} onChange={(e) => setCheckin(e.target.value)} required />
-//                     </label>
-//                 </div>
-//                 <div>
-//                     <label>
-//                         Check-out:
-//                         <input type="date" value={checkout} onChange={(e) => setCheckout(e.target.value)} required />
-//                     </label>
-//                 </div>
-//                 <div>
-//                     <label>
-//                         Adults:
-//                         <input type="number" value={adults} onChange={(e) => setAdults(e.target.value)} min="1" required />
-//                     </label>
-//                 </div>
-//                 <div>
-//                     <label>
-//                         Children:
-//                         <input type="number" value={children} onChange={(e) => setChildren(e.target.value)} min="0" required />
-//                     </label>
-//                 </div>
-//                 <div>
-//                     <label>
-//                         Infants:
-//                         <input type="number" value={infants} onChange={(e) => setInfants(e.target.value)} min="0" required />
-//                     </label>
-//                 </div>
-//                 <div>
-//                     <label>
-//                         Pets:
-//                         <input type="number" value={pets} onChange={(e) => setPets(e.target.value)} min="0" required />
-//                     </label>
-//                 </div>
-//                 <button type="submit">Search</button>
-//             </form>
-//             {error && <div>Error: {error}</div>}
-//             {!isLoaded ? (
-//                 <div>Loading...</div>
-//             ) : selectedItem ? (
-//                 renderItemDetails(selectedItem)
-//             ) : (
-//                 <div className="results">
-//                     {items.map(item => (
-//                         <div key={item.id} className="listing" onClick={() => handleItemClick(item)}>
-//                             <h4>{item.name}</h4>
-//                             <p>Price: ${item.price.rate} {item.price.currency} per night</p>
-//                             <img src={item.images[0]} alt="Thumbnail" width="100" />
-//                         </div>
-//                     ))}
-//                 </div>
-//             )}
-//         </div>
-//     );
-// }
-// export default SearchBar;

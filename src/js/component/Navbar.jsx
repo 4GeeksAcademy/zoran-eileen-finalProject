@@ -1,23 +1,20 @@
-import React from "react";
+import React from 'react';
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-    return(
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="container-fluid" id="navbar">
-                    <a className="navbar-brand ps-5" href="#">Zoran and Eileen's Airbnb</a>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                <div className="collapse navbar-collapse justify-content-end pe-5" id="navbarNavAltMarkup">
-                    <div className="navbar-nav">
-                        <a className="nav-link active" aria-current="page" href="#">Home</a>
-                        <a className="nav-link" href="#">About</a>
-                        <a className="nav-link" href="#">Services</a>
-                        <a className="nav-link" href="#">Contact</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    );
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+            Mock Airbnb
+          </Link>
+        </Typography>
+        <Button color="inherit" component={Link} to="/">Home</Button>
+      </Toolbar>
+    </AppBar>
+  );
 };
+
 export default Navbar;

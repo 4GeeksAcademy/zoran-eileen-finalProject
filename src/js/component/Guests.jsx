@@ -36,7 +36,6 @@ export default function MultipleSelectCheckmarks() {
       target: { value },
     } = event;
     setPersonName(
-      // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
