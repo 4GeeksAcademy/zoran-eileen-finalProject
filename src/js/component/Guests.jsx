@@ -41,14 +41,6 @@ export default function MultipleSelectCheckmarks() {
   };
 
   return (
-    <div className='guest_card'>
-         <div className='guest_number'>
-         <TextField 
-         id="outlined-basic" 
-         label="Number" 
-         variant="outlined"
-          />
-    </div>
     <div className='guest_button'>
       <FormControl sx={{ m: 1, width: 300 }}>
         <InputLabel id="demo-multiple-checkbox-label">Guests</InputLabel>
@@ -70,7 +62,6 @@ export default function MultipleSelectCheckmarks() {
           ))}
         </Select>
       </FormControl>
-    </div>
     </div>
   );
 }

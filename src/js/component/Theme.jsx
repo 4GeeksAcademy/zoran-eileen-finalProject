@@ -3,10 +3,13 @@ import { createTheme } from '@mui/material/styles';
 const Theme = createTheme({
   palette: {
     primary: {
-      main: '#ff5a5f', // Airbnb Red
+      main: '#FD6A02', // Airbnb Red
     },
     secondary: {
-      main: '#00a699', // Airbnb Green
+      main: '#FD9000', // Airbnb Green
+    },
+    background: {
+      default: '#011F22',
     },
   },
   typography: {

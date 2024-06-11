@@ -4,7 +4,6 @@ import Reservation from './Reservation.jsx';
 import { useParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-// Styled components for custom styling
 const Container = styled.div`
   display: flex;
 `;
@@ -18,7 +17,11 @@ const ReservationContainer = styled.div`
   flex: 1;
   position: ;
   top: 20px;
-  margin-left: 20px; /* Adjust as needed */
+  margin-left: 20px; 
+`;
+
+const PropertyName = styled.h2`
+  color: white;
 `;
 
 const PropertyDetails = () => {
@@ -40,7 +43,7 @@ const PropertyDetails = () => {
     return (
         <Container>
             <ImageContainer>
-                <h2>{property.name}</h2>
+                <PropertyName>{property.name}</PropertyName>
                 <img src={property.images[0]} alt="Property" width="100%" />
                 <p>{property.description}</p>
             </ImageContainer>
