@@ -9,6 +9,7 @@ import Theme from "./component/Theme.jsx"
 import { Provider } from './component/appContext.js';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
+import UserProfile from "./component/UserProfile.jsx";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/" element={<SearchBar />} />
               <Route path="/details/:id" element={<PropertyDetails />} />
               <Route path="/reservationconfirmation/:id" element={<ReservationConfirmation />} />
+              <Route path="/profile" element = {<UserProfile />} />
             </Routes>
           </div>
         </Router>

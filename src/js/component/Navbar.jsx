@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, Box, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import logo from '/workspaces/zoran-eileen-finalProject/src/img/logo.png';
 import Signup from './Signup.jsx';
 
@@ -27,21 +29,25 @@ const Navbar = () => {
               <img src={logo} alt="Mock Airbnb Logo" style={{ height: '100px', marginRight: '30px' }} />
             </Link>
           </Typography>
-          <Button
+          <Link to="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>
+            <IconButton color="inherit">
+              <FontAwesomeIcon icon={faUser} />
+            </IconButton>
+          </Link>
+          <IconButton
             aria-controls="simple-menu"
             aria-haspopup="true"
             onClick={handleClick}
             color="inherit"
           >
-            Menu
-          </Button>
+            <FontAwesomeIcon icon={faBars} />
+          </IconButton>
           <Menu
             id="simple-menu"
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
             onClose={handleClose}
-            getContentAnchorEl={null}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'right',
