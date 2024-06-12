@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, Box, IconButton } 
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
-import logo from '/workspaces/zoran-eileen-finalProject/src/img/logo.png';
+import logo from '../../img/logo.png';
 import Signup from './Signup.jsx';
 
 const Navbar = () => {
